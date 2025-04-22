@@ -340,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             );
           } else {
-            return const Center(child: Text('Something went wrong'));
+            return const Center(child: Text('Click + to add notes'));
           }
         },
       ),
