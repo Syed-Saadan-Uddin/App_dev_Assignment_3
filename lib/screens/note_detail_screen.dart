@@ -1,3 +1,4 @@
+// Modify NoteDetailScreen to be a bottom sheet
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,10 +7,10 @@ import '../bloc/notes_event.dart';
 import '../models/note.dart';
 import 'edit_note_screen.dart';
 
-class NoteDetailScreen extends StatelessWidget {
+class NoteDetailBottomSheet extends StatelessWidget {
   final Note note;
 
-  const NoteDetailScreen({Key? key, required this.note}) : super(key: key);
+  const NoteDetailBottomSheet({Key? key, required this.note}) : super(key: key);
 
   Color _getCategoryColor(String category) {
     switch (category) {
@@ -26,75 +27,65 @@ class NoteDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'Note Details',
-          style: TextStyle(color: Colors.black),
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              note.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
-              color: note.isPinned ? Colors.amber : Colors.black,
-            ),
-            onPressed: () {
-              context.read<NotesBloc>().add(ToggleNotePin(note));
-              Navigator.pop(context); // Return to previous screen to see changes
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.edit, color: Colors.black),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditNoteScreen(note: note),
-                ),
-              ).then((_) => Navigator.pop(context)); // Close details screen when returning from edit
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.black),
-            onPressed: () {
-              _showDeleteConfirmationDialog(context);
-            },
-          ),
-        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: _getCategoryColor(note.category),
-                borderRadius: BorderRadius.circular(8.0),
-                border: note.isPinned
-                    ? Border.all(color: Colors.amber, width: 2)
-                    : null,
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Handle to drag the sheet
+          Container(
+            margin: const EdgeInsets.only(top: 8),
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          // Header with actions
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    note.title,
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                // Category chip
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: _getCategoryColor(note.category).withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    note.category,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Content
+          Flexible(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    note.title,
-                    style: const TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
                   if (note.imagePaths.isNotEmpty) ...[
                     SizedBox(
                       height: 200,
@@ -128,34 +119,49 @@ class NoteDetailScreen extends StatelessWidget {
                     note.content,
                     style: const TextStyle(fontSize: 16.0),
                   ),
-                  const SizedBox(height: 16.0),
-                  Row(
-                    children: [
-                      Chip(
-                        label: Text(note.category),
-                        backgroundColor: Colors.white.withOpacity(0.7),
-                      ),
-                      if (note.isPinned) ...[
-                        const SizedBox(width: 8),
-                        Chip(
-                          label: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.push_pin, size: 16),
-                              SizedBox(width: 4),
-                              Text('Pinned'),
-                            ],
-                          ),
-                          backgroundColor: Colors.amber.withOpacity(0.3),
-                        ),
-                      ]
-                    ],
-                  ),
+                  const SizedBox(height: 24.0),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          // Action buttons
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    note.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+                    color: note.isPinned ? Colors.amber : Colors.grey,
+                  ),
+                  onPressed: () {
+                    context.read<NotesBloc>().add(ToggleNotePin(note));
+                    Navigator.pop(context);
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.pop(context); // Close bottom sheet
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditNoteScreen(note: note),
+                      ),
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () {
+                    _showDeleteConfirmationDialog(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -179,7 +185,7 @@ class NoteDetailScreen extends StatelessWidget {
               onPressed: () {
                 context.read<NotesBloc>().add(DeleteNote(note.id));
                 Navigator.of(dialogContext).pop(); // Close dialog
-                Navigator.of(context).pop(); // Close detail screen
+                Navigator.of(context).pop(); // Close bottom sheet
               },
             ),
           ],
