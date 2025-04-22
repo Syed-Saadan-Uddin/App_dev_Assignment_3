@@ -152,11 +152,11 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   List<Note> _getFilteredNotes() {
     final allNotes = _getNotesFromBox();
     
-    // First sort by pinned status (pinned notes first)
+    
     allNotes.sort((a, b) {
       if (a.isPinned && !b.isPinned) return -1;
       if (!a.isPinned && b.isPinned) return 1;
-      // If both are pinned or both are not pinned, sort by creation date (newest first)
+      
       return b.createdAt.compareTo(a.createdAt);
     });
     

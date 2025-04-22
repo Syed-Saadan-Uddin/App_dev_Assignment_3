@@ -29,11 +29,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Color _getCategoryColor(String category) {
     switch (category) {
       case 'Work':
-        return Colors.yellow.shade200; // More vibrant yellow for Work
+        return Colors.yellow.shade200; 
       case 'Personal':
-        return Colors.blue.shade200; // Lighter blue for Personal
+        return Colors.blue.shade200; 
       case 'Study':
-        return Colors.pink.shade200; // Lighter pink for Study
+        return Colors.pink.shade200; 
       default:
         return Colors.grey.shade200;
     }
@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     ).then((_) {
-      // Refresh notes when bottom sheet is closed
+      
       context.read<NotesBloc>().add(LoadNotes());
     });
   }
@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5), // Light background color like in the image
+      backgroundColor: const Color(0xFFF5F5F5), 
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -151,26 +151,26 @@ class _HomeScreenState extends State<HomeScreen> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.9, // Slightly taller cards
-                  crossAxisSpacing: 16.0, // More spacing
-                  mainAxisSpacing: 16.0, // More spacing
+                  childAspectRatio: 0.9, 
+                  crossAxisSpacing: 16.0, 
+                  mainAxisSpacing: 16.0, 
                 ),
                 itemCount: notes.length,
                 itemBuilder: (context, index) {
                   final note = notes[index];
-                  // Generate a small random angle for each card for the tilted effect
-                  final angle = -0.04 - (Random().nextDouble() * 0.02); // Small negative angle for left tilt
+                  
+                  final angle = -0.04 - (Random().nextDouble() * 0.02); 
                   
                   return GestureDetector(
                     onTap: () {
                       _showNoteDetails(context, note);
                     },
                     child: Transform.rotate(
-                      angle: angle, // Apply rotation transform
+                      angle: angle, 
                       child: Container(
                         decoration: BoxDecoration(
                           color: _getCategoryColor(note.category),
-                          borderRadius: BorderRadius.circular(20.0), // More rounded corners
+                          borderRadius: BorderRadius.circular(20.0), 
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.1),
@@ -306,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             ),
-                            // Pin button in top right corner
+                            
                             Positioned(
                               top: 0,
                               right: 0,
@@ -319,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                     color: note.isPinned ? Colors.amber : Colors.grey.withOpacity(0.7),
                                     borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(20), // Match the card's corner radius
+                                      topRight: Radius.circular(20), 
                                       bottomLeft: Radius.circular(12),
                                     ),
                                   ),

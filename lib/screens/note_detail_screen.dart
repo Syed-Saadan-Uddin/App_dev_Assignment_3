@@ -1,4 +1,4 @@
-// Modify NoteDetailScreen to be a bottom sheet
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +38,7 @@ class NoteDetailBottomSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle to drag the sheet
+          
           Container(
             margin: const EdgeInsets.only(top: 8),
             width: 40,
@@ -48,7 +48,7 @@ class NoteDetailBottomSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          // Header with actions
+          
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -64,7 +64,7 @@ class NoteDetailBottomSheet extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                // Category chip
+                
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
@@ -79,7 +79,7 @@ class NoteDetailBottomSheet extends StatelessWidget {
               ],
             ),
           ),
-          // Content
+          
           Flexible(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -124,7 +124,7 @@ class NoteDetailBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-          // Action buttons
+          
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -143,7 +143,7 @@ class NoteDetailBottomSheet extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.edit),
                   onPressed: () {
-                    Navigator.pop(context); // Close bottom sheet
+                    Navigator.pop(context); 
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -184,8 +184,8 @@ class NoteDetailBottomSheet extends StatelessWidget {
               child: const Text('Delete'),
               onPressed: () {
                 context.read<NotesBloc>().add(DeleteNote(note.id));
-                Navigator.of(dialogContext).pop(); // Close dialog
-                Navigator.of(context).pop(); // Close bottom sheet
+                Navigator.of(dialogContext).pop(); 
+                Navigator.of(context).pop(); 
               },
             ),
           ],

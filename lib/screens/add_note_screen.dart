@@ -239,7 +239,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 }
                 
                 final note = Note(
-                  id: '',  // Will be set in bloc
+                  id: '',  
                   title: title,
                   content: content,
                   category: _selectedCategory,
